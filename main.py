@@ -5,7 +5,9 @@ import itertools
 import csv
 import os
 import numpy as np
-
+# for the visualization
+# https://www.datawrapper.de/map/BBqiS/visualize
+# http://datamaps.github.io/
 #-------------------------------------------------------
 # for the geographic mapping using GeoDB
 import geoip2.database
