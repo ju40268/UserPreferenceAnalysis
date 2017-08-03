@@ -1,0 +1,97 @@
+# Define UI for application that draws a histogram
+#fluidPage(
+  
+  # Application title
+#  titlePanel("Data Anaylsis"),
+  
+  # Sidebar with a slider input for the number of bins
+  #sidebarLayout(
+ #   sidebarPanel(
+#      sliderInput("bins",
+#                  "Number of bins:",
+#                  min = 1,
+#                  max = 744,
+ #                 value = 350)
+#    ),
+ #   selectInput("select", label = h3("Select box"), 
+#                choices = list("Choice 1" = 1, "Choice 2" = 2, "Choice 3" = 3), 
+#                selected = 1),
+#    hr(),
+    # luidRow(column(3, verbatimTextOutput("value")))
+    
+    # Show a plot of the generated distribution
+#    mainPanel(
+#      plotOutput("distPlot")
+#    )
+#  )
+#)  titlePanel("censusVis"),
+
+
+
+# --------------------------------------------
+
+
+library(shiny)
+
+# Define UI for application that draws a histogram
+fluidPage(
+  
+  # Application title
+  titlePanel("Data Anaylsis"),
+  
+  # Sidebar with a slider input for the number of bins
+  sidebarLayout(
+    sidebarPanel(
+      helpText("Choose between diiferent mode:"),
+      selectInput("var", 
+                  label = "Choose a variable to display",
+                  choices = c("Percent White", "Percent Black",
+                              "Percent Hispanic", "Percent Asian"),
+                  selected = "Percent White"),
+      sliderInput("bins",
+                  "Number of bins:",
+                  min = 1,
+                  max = 744,
+                  value = 350)
+      
+    ),
+    mainPanel(
+      plotOutput("distPlot"),
+      plotOutput("distPlot_blue")
+    )
+  )
+)
+
+# ------
+library(shiny)
+require(grDevices)
+
+
+
+
+# Define server logic required to draw a histogram
+function(input, output) {
+  
+  # Expression that generates a histogram. The expression is
+  # wrapped in a call to renderPlot to indicate that:
+  #
+  #  1) It is "reactive" and therefore should be automatically
+  #     re-executed when inputs change
+  #  2) Its output type is a plot
+  
+  output$distPlot <- renderPlot({
+    # df <- read.csv('save_csv.csv')
+    # df = data.frame(save_csv)
+    total_transaction_count <- df[,3]
+    barplot(total_transaction_count, main="Car Distribution", xlab="Number of Gears", col = 'blue', border = 'white')
+  })
+  
+  output$distPlot_blue <- renderPlot({
+    # df <- read.csv('save_csv.csv')
+    total_transaction_count <- df[,3]
+    bins <- seq(min(total_transaction_count), max(total_transaction_count), length.out = input$bins + 1)
+    # draw the histogram with the specified number of bins
+    hist(total_transaction_count, breaks = bins, col = 'blue', border = 'white')
+  })
+  
+}
