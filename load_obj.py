@@ -1,3 +1,8 @@
+import boto3
+import findspark
+findspark.init()
+print 'find spark session FINISHED.'
+import gzip
 from os.path import expanduser
 from pyspark import SparkContext, SparkConf
 from pyspark import SparkFiles
@@ -12,14 +17,12 @@ download_dir = home +'/song_user_preference/'
 download_obj = download_dir + 'temp_data.gz'
 file_extension = '.txt'
 
-# ------  write as text file ------------
 def write_output(obj, filename):
     with open(filename,'w') as f:
         writer = csv.writer(f)
         writer.writerows(obj)
     f.close()
 
-# ------- how many distint users are there? ----------
 def geo_active_user(split_data):
     return split_data.map(lambda data: data[3]).distinct()
 
@@ -29,14 +32,12 @@ def geo_most_active_user(split_data):
     return id_count
 
 def parser(f):
-	# ###### [AVOID] avoid using the sc = SparkContext() directly. may have muliple sc running error ------
     sc = SparkContext.getOrCreate()
+    #sc = SparkContext()
     #lines = sc.textFile(f)
-    # have to filter out some empty list in the original file. don't know why.
     lines = sc.parallelize(f)
     remove_empty = lines.flatMap(lambda line: line.split('\n')).filter(lambda x: len(x) > 0)
     split_data = remove_empty.map(lambda line: line.split(' '))
-    # the original parsing 
     #split_data = lines.flatMap(lambda line: line.split('\n')).map(lambda line: line.split(' '))
     return split_data
 
@@ -54,7 +55,7 @@ if __name__ == "__main__":
     # ---- start the main program here -----
     s3 = boto3.resource('s3')
     bucket = s3.Bucket('aws21-squeezebox-analysis-tempdata')
-    for obj in bucket.objects.filter(Prefix='2017/05/01/00.eu-w1.apps00'):
+    for obj in bucket.objects.filter(Prefix='2017/05/02/00.eu-w1.apps00'):
         key = obj.key
         print 'Now processing with: ', key
         no_slash_filename = key.replace('/','_')
