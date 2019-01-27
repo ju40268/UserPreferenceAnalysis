@@ -15,7 +15,24 @@
 in the format of [timestamp, mac_addr, user_id, ip_addr, music_url, duration]
 
 ## Sample Output
+aggregate all countries, (Date, Hour) - Transaction Amount
 ```
 day,hour,value
 01,00,195739
 ```
+fixed date: Country - Transaction Amount
+
+```
+Country,transaction
+Germany,43135121
+Italy,33454518
+United States of America,28295784
+```
+
+## Sample Stats Picture
+
+
+
+![Hourly Transaction Amount](https://raw.githubusercontent.com/may811204/UserPreferenceAnaylsis/blob/master/statsPlots/horiz_plot_2016_02.png)
+
+
