@@ -33,6 +33,6 @@ United States of America,28295784
 
 
 
-![Hourly Transaction Amount](https://github.com/may811204/UserPreferenceAnaylsis/blob/master/statsPlots/horiz_plot_2016_02.png)
+![alt text](https://github.com/may811204/UserPreferenceAnaylsis/blob/master/statsPlots/horiz_plot_2016_02.png "Hourly Transaction Amount")
 
 
