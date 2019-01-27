@@ -3,7 +3,6 @@ import boto3
 import findspark
 # ----- avoid the env var not set ------------
 findspark.init()
-print 'find spark session FINISHED.'
 # --------------------------------------------
 import traceback
 import logging
@@ -65,7 +64,6 @@ if __name__ == "__main__":
     # # print date_hour_collection
     for date, hour in date_hour_collection:
         everymonth_day = date[8:10]
-        print 'Now processing with:', everymonth_day
         for h in hour:
             # singleday_hour =  h[-9:-7]
             pickle_f = download(h, h)
@@ -83,4 +81,3 @@ if __name__ == "__main__":
     #df.to_csv( 'geo_' + month + '.csv', index=False, header=['month','day','list'])
     df = pd.DataFrame(output)
     df.to_csv( 'geo_only_list_' + month + '.csv', index=False, encoding='utf-8',header=['Country', 'transaction'])
-    print 'End'

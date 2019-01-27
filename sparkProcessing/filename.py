@@ -1,7 +1,6 @@
 import boto3
 import findspark
 findspark.init()
-print 'find spark session FINISHED.'
 import pickle
 import gzip
 from os.path import expanduser
@@ -23,7 +22,5 @@ if __name__ == "__main__":
     bucket = s3.Bucket('aws21-squeezebox-analysis-tempdata')
     filename_list = []
     for obj in bucket.objects.all():
-        print obj.key
         filename_list.append(obj.key)
     save_filename(filename_list)
-    print 'Now end the session.'

@@ -1,7 +1,6 @@
 import boto3
 import findspark
 findspark.init()
-print 'find spark session FINISHED.'
 import gzip
 from os.path import expanduser
 from pyspark import SparkContext, SparkConf
@@ -46,7 +45,7 @@ def remove(filename):
 
 def print_pair(pair):
     for i, j in pair:
-        print i, j
+        print (i, j)
 
 if __name__ == "__main__":
     # ---- start the main program here -----
@@ -69,13 +68,13 @@ if __name__ == "__main__":
     for date, filename in date_hour_collection:
         store = []
         # for a specific date, specific hour period.
-        print date
+        print(date)
         no_slash_date = date.replace('/','_')
         # loop thru all the same prefix filename
         # print [i for i in filename]
         for f in filename:
             download_obj_filename = f.replace('/','_')
-            print 'Now processing with: ', download_obj_filename
+            print('Now processing with: ', download_obj_filename)
             f_content = unzip(f,download_obj_filename)
             split_data = parse(f_content)
             store.append(geo_most_active_user(split_data))
@@ -85,20 +84,15 @@ if __name__ == "__main__":
         # ---- reduce by unique id, sum up all the occurence count ------
         id_transaction_rdd = flat.reduceByKey(add).sortBy(lambda x:-x[1])
 	# id_transaction_pair = flat.reduceByKey(add).sortBy(lambda x: -x[1])
-	id_transaction_pair = id_transaction_rdd.collect()
-        var.save('/home/ubuntu/song_user_preference/pickle_output/'+no_slash_date, id_transaction_pair)
+    id_transaction_pair = id_transaction_rdd.collect()
+    var.save('/home/ubuntu/song_user_preference/pickle_output/'+no_slash_date, id_transaction_pair)
 	# -----
-	total_transaction = id_transaction_rdd.map(lambda x:x[1]).sum()
-	total_transaction_count.append((no_slash_date,total_transaction))
-        # print_pair(id_transaction_pair)
-        # ---- count the # of unique id ------
-        unique_id = flat.distinct().count()
-        unique_id_count.append((no_slash_date,unique_id))
-        #---- sum up the transaction per person ------
-        # total_transaction = 
-    print 'Now END LOOPINGG!!!!!!'
-    print unique_id_count
-    print total_transaction_count
+    total_transaction = id_transaction_rdd.map(lambda x:x[1]).sum()
+    total_transaction_count.append((no_slash_date,total_transaction))
+    unique_id = flat.distinct().count()
+    unique_id_count.append((no_slash_date,unique_id))
+    print(unique_id_count)
+    print(total_transaction_count)
     var.save('/home/ubuntu/song_user_preference/pickle_output/'+'unique_id',unique_id_count)
     var.save('/home/ubuntu/song_user_preference/pickle_output/'+'total_transaction', total_transaction_count)
 

@@ -1,7 +1,6 @@
 import boto3
 import findspark
 findspark.init()
-print 'find spark session FINISHED.'
 import pickle
 import gzip
 from os.path import expanduser
@@ -28,5 +27,4 @@ if __name__ == "__main__":
     lines = sc.parallelize(load_filename())   
     date_hour_collection =  lines.map(lambda x:(x[:13],x)).groupByKey().map(lambda x : (x[0], list(x[1]))).collect()
     save_groupby(date_hour_collection)
-    print 'Session End Successfully.'
 	

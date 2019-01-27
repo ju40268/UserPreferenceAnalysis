@@ -1,7 +1,6 @@
 import boto3
 import findspark
 findspark.init()
-print 'find spark session FINISHED.'
 import traceback
 import logging
 import gzip
@@ -68,7 +67,7 @@ if __name__ == "__main__":
             store = []
             unique_id_count = []
             # for a specific date, specific hour period.
-            print date, filename
+            print(date, filename)
             no_slash_date = date.replace('/','_')
             # loop thru all the same prefix filename
             # print [i for i in filename]
@@ -78,31 +77,31 @@ if __name__ == "__main__":
                 #f_content = unzip(f,download_obj_filename+'.gz')
                 # "s3n://aws21-squeezebox-analysis-tempdata/2017/05/01/00.eu-w1.apps001.log.gz"
                 try:
-		    f_content = sc.textFile("s3n://aws21-squeezebox-analysis-tempdata/" + f)
- 		    split_data = parse(f_content)
-		    try:
+                    f_content = sc.textFile("s3n://aws21-squeezebox-analysis-tempdata/" + f)
+                    split_data = parse(f_content)
+                    try:
                         per_file_id_count = geo_most_active_user(f,split_data).collect()
                         store.append(per_file_id_count)
-		    except Exception as e:
-			alert.report(f)
-		except Exception as e:
-		    alert.report(f)
-            # ---- concatenate the small list into big list, and such big list according to one hour ----
-            flat = list_concat(store)
-            # ---- reduce by unique id, sum up all the occurence count ------
-            id_transaction_pair = flat.reduceByKey(add).sortBy(lambda x: -x[1]).collect()
-            var.save('/home/ubuntu/song_user_preference/pickle_output/' + no_slash_date, id_transaction_pair)
-            # print_pair(id_transaction_pair)
-            # ---- count the # of unique id ------
-            # unique_id = flat.distinct().count()
-            # unique_id_count.append(unique_id)
-            #---- sum up the transaction per person ------
-            # total_transaction =
-            # var.save(date + '_id_count', unique_id_count)
+                    except Exception as e:
+			            alert.report(f)
+                except Exception as e:
+                    alert.report(f)
+                # ---- concatenate the small list into big list, and such big list according to one hour ----
+                flat = list_concat(store)
+                # ---- reduce by unique id, sum up all the occurence count ------
+                id_transaction_pair = flat.reduceByKey(add).sortBy(lambda x: -x[1]).collect()
+                var.save('/home/ubuntu/song_user_preference/pickle_output/' + no_slash_date, id_transaction_pair)
+                # print_pair(id_transaction_pair)
+                # ---- count the # of unique id ------
+                # unique_id = flat.distinct().count()
+                # unique_id_count.append(unique_id)
+                #---- sum up the transaction per person ------
+                # total_transaction =
+                # var.save(date + '_id_count', unique_id_count)
     except Exception as e:
         #print "Unexpected error:", sys.exc_info()[0]
         logging.error(traceback.format_exc())
 	alert.report('crashed.')
         #raise
-    print 'End of the session.'
+    print('End of the session.')
 

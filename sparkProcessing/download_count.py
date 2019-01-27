@@ -1,7 +1,6 @@
 import boto3
 import findspark
 findspark.init()
-print 'find spark session FINISHED.'
 import gzip
 from os.path import expanduser
 from pyspark import SparkContext, SparkConf
@@ -68,11 +67,10 @@ if __name__ == "__main__":
 
     for date, filename in date_hour_collection:
         store = []
-        print date
         no_slash_date = date.replace('/','_')
         for f in filename:
             download_obj_filename = f.replace('/','_')
-            print 'Now processing with: ', download_obj_filename
+            print('Now processing with: ', download_obj_filename)
             f_content = unzip(f,download_obj_filename)
             split_data = parse(f_content)
             store.append(transaction_per_country(split_data))
@@ -81,5 +79,4 @@ if __name__ == "__main__":
         country_count_pair = flat.reduceByKey(add).sortBy(lambda x:-x[1]).collect()
         #  = id_transaction_rdd.collect()
         var.save('/home/ubuntu/song_user_preference/pickle_output/'+no_slash_date, country_count_pair)
-    print 'Now END LOOPINGG!!!!!!'
     alert.report('end of the program.')

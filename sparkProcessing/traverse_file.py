@@ -1,7 +1,6 @@
 import boto3
 import findspark
 findspark.init()
-print 'find spark session FINISHED.'
 import gzip
 from os.path import expanduser
 from pyspark import SparkContext, SparkConf
@@ -46,10 +45,6 @@ def list_concat(param_list):
 def remove(filename):
     os.remove(filename)
 
-def print_pair(pair):
-    for i, j in pair:
-        print i, j
-
 if __name__ == "__main__":
     # ---- start the main program here -----
     s3 = boto3.resource('s3')
@@ -69,7 +64,7 @@ if __name__ == "__main__":
             store = []
             unique_id_count = []
             # for a specific date, specific hour period.
-            print date
+            print(date)
             no_slash_date = date.replace('/','_')
             # loop thru all the same prefix filename
             # print [i for i in filename]
@@ -80,7 +75,7 @@ if __name__ == "__main__":
                 # "s3n://aws21-squeezebox-analysis-tempdata/2017/05/01/00.eu-w1.apps001.log.gz"
                 f_content = sc.textFile("s3n://aws21-squeezebox-analysis-tempdata/" + f)
                 split_data = parse(f_content)
-                print geo_most_active_user(split_data)
+                print(geo_most_active_user(split_data))
                 # store.append(geo_most_active_user(split_data))
                 # remove(download_obj_filename+'.gz')
             # ---- concatenate the small list into big list, and such big list according to one hour ----
@@ -96,7 +91,6 @@ if __name__ == "__main__":
             # total_transaction =
         # var.save(date + '_id_count', unique_id_count)
     except:
-        # alert.report()
-    print 'End of the session.'
+        alert.report()
 
 # f.close() somewhere 

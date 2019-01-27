@@ -1,7 +1,6 @@
 import boto3
 import findspark
 findspark.init()
-print 'find spark session FINISHED.'
 import gzip
 from os.path import expanduser
 from pyspark import SparkContext, SparkConf
@@ -28,7 +27,7 @@ def geo_most_active_user(f,split_data):
     try:
         id_count_pair = split_data.map(lambda data: (data[3],1)).reduceByKey(add).collect()
     except IndexError:
-        print 'Index Error @ filename: ', f
+        print('Index Error @ filename: ', f)
         alert.report(f)
     return id_count_pair
 
@@ -74,4 +73,4 @@ if __name__ == "__main__":
         var.save(no_slash_date[13:], country_count_pair)
 
     alert.report('Successfully end the program.')
-    print 'End of the session.'
+    print('End of the session.')

@@ -11,11 +11,9 @@ for key, item in df.groupby('hour'):
     transaction_by_hour = groupby_hour['count'].sum()
     hour_count.append((key, transaction_by_hour))
     # print len(transaction_by_hour) 
-
-print(hour_count)
+    
 ndays = len(np.unique(df.index.values))
 df_hour_count = pd.DataFrame(hour_count)
-print df_hour_count
 
 # for horizontal bar plot
 df.pivot(columns='hour',values='count').plot.barh(stacked=True, figsize=(30, 20))

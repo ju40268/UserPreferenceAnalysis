@@ -2,7 +2,6 @@ import boto3
 import findspark
 # ----- avoid the env var not set ------------
 findspark.init()
-print 'find spark session FINISHED.'
 # --------------------------------------------
 import traceback
 import logging
@@ -19,6 +18,7 @@ import pickle
 import var
 import pandas as pd
 import sys
+import alert
 
 def download(s3_obj_key, download_obj_filename):
     bucket.download_file(s3_obj_key, download_obj_filename)
@@ -38,17 +38,17 @@ if __name__ == "__main__":
     month = str(sys.argv[1])
     for obj in bucket.objects.filter(Prefix=month):
         try:
-            print 'Now processing with bucket: ', obj.key
+            print('Now processing with bucket: ', obj.key)
             pickle_f = download(obj.key, obj.key)
             f = sc.parallelize(pickle_f)
             dump_file.append([obj.key[8:10], obj.key[11:13], f.map(lambda x : x[1]).sum()])            
             os.remove(obj.key)
         except Exception as e:
-            print e
+            alert.msg(e)
     
     var.save('date_transaction_list_' + month, dump_file)
     date_transaction_list = var.load('date_transaction_list_' + month + '.pickle')
     df = pd.DataFrame(date_transaction_list)
     df.to_csv(month + '.csv', index=False, header=['day','hour','value'])
     # csv.writer(file('output.tsv', 'w+'), delimiter='\t').writerows(csv.reader(open("save_csv.csv")))
-    print 'End'
+    print('End')

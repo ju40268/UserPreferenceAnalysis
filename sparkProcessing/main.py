@@ -101,7 +101,7 @@ def concurrent_max_transaction_per_country(split_data):
     city_count = city_mapping.map(lambda x:(x,1)).reduceByKey(add)
     sorted_city_count = city_count.sortBy(lambda x: -x[1]).collect()
     # for sorting in the descending order.
-    print '#'*40
+    print('#'*40)
     return sorted_city_count
 
 # for concurrent max user per country
@@ -119,8 +119,8 @@ def concurrent_max_user_per_country(split_data):
     # print '#'*40
     # print pair.distinct().keys().take(6)
     distinct_count = pair.distinct().keys().map(lambda x: (x, 1)).reduceByKey(add)
-    print distinct_count.sortBy(lambda x: -x[1]).collect()
-    print '#'*40
+    print (distinct_count.sortBy(lambda x: -x[1]).collect())
+    print ('#'*40)
     
 def geo_active_user(split_data):
     return split_data.map(lambda data: data[3]).distinct().collect()
@@ -129,7 +129,7 @@ def geo_most_active_user(split_data):
     id_count = split_data.map(lambda data: (data[3],1)).reduceByKey(add).collect()
 #     for (user_id, count) in id_count:
 #         print("%s: %i" % (user_id, count))
-    print '#'*40
+    print ('#'*40)
     return id_count
 
 
@@ -155,31 +155,31 @@ if __name__ == "__main__":
     if Flag_geo_most_active_user:
         for i in range(3):
             split_data = parser(f_list[i])
-            print 'filename', f_list[i]
+            print ('filename', f_list[i])
             geo_most_active_user_list.append(geo_most_active_user(split_data))
         flat_most_active = list_concat(geo_most_active_user_list)  
         
         most_active_count = flat_most_active.groupByKey().map(lambda x : (x[0], list(x[1]))).mapValues(sum).sortBy(lambda x: -x[1]).collect() 
-        print most_active_count
+        print(most_active_count)
         
     if Flag_max_transaction_per_country:
         for f in f_list:
-            print 'Now parsing with the file:', f
+            print('Now parsing with the file:', f)
             split_data = parser(f)
             #-----here the most active-----
             concurrent_max_transaction_per_country_list.append(concurrent_max_transaction_per_country(split_data))
         # for summing up
         flat_transaction = list_concat(concurrent_max_transaction_per_country_list)
-        print flat_transaction.reduceByKey(add).sortBy(lambda x: -x[1]).collect()
+        print(flat_transaction.reduceByKey(add).sortBy(lambda x: -x[1]).collect())
     
     # how many distinct users during all 2016-2017
     if Flag_geo_active_user:
         for f in f_list:
-            print 'Now parsing with the file:', f 
+            print('Now parsing with the file:', f)
             split_data = parser(f)
             geo_active_user_list.append(geo_active_user(split_data))
         flat_geo_active_user = list_concat(geo_active_user_list)
-        print flat_geo_active_user.distinct().count()
+        print(flat_geo_active_user.distinct().count())
     
 #     if Flag_geo_active_user:
 #         for i in range(3):
@@ -196,7 +196,7 @@ if __name__ == "__main__":
             concurrent_max_user_online_list.append(concurrent_max_user_online(split_data))
         concurrent_max_user_online_pair = make_pair(f_list,concurrent_max_user_online_list)
         # only recording for the # of concurrent users, w/o timestamp.
-        print concurrent_max_user_online_list 
+        print(concurrent_max_user_online_list )
 #         printing = np.array(concurrent_max_user_online_pair)
 #         print printing[:,1]
         

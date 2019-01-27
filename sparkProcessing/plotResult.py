@@ -22,7 +22,6 @@ ndays = len(np.unique(df.index.values))
 # print(hour_count)
 
 df = pd.DataFrame(raw_csv)
-print df
 
 # for horizontal bar plot
 # df.pivot(columns='hour',values='count').plot.barh(stacked=True, figsize=(15, 10))
@@ -32,9 +31,6 @@ print df
 # plt.savefig('hour_transaction_' + month + '.png')
 # plt.clf()
 comp = pd.Series(df[:2], name='Pie')
-print comp
 comp.plot.pie(figsize=(10, 10), labels=list(range(24)),autopct='%.2f', fontsize=10)
 plt.savefig('geo_pie_' + month + '.png')
 plt.clf()
-
-print 'End'

@@ -1,7 +1,6 @@
 import boto3
 import findspark
 findspark.init()
-print 'find spark session FINISHED.'
 import traceback
 import logging
 import gzip
@@ -67,7 +66,6 @@ if __name__ == "__main__":
             store = []
             unique_id_count = []
             # for a specific date, specific hour period.
-            print date, filename
             no_slash_date = date.replace('/','_')
             # loop thru all the same prefix filename
             # print [i for i in filename]
@@ -103,4 +101,3 @@ if __name__ == "__main__":
         logging.error(traceback.format_exc())
         alert.report('crashed.')
         #raise
-    print 'End of the session.'

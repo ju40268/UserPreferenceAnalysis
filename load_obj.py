@@ -1,7 +1,6 @@
 import boto3
 import findspark
 findspark.init()
-print 'find spark session FINISHED.'
 import gzip
 from os.path import expanduser
 from pyspark import SparkContext, SparkConf
@@ -28,7 +27,6 @@ def geo_active_user(split_data):
 
 def geo_most_active_user(split_data):
     id_count = split_data.map(lambda data: (data[3],1)).reduceByKey(add).collect()
-    print '#'*40
     return id_count
 
 def parser(f):
@@ -57,7 +55,7 @@ if __name__ == "__main__":
     bucket = s3.Bucket('aws21-squeezebox-analysis-tempdata')
     for obj in bucket.objects.filter(Prefix='2017/05/02/00.eu-w1.apps00'):
         key = obj.key
-        print 'Now processing with: ', key
+        print('Now processing with: ', key)
         no_slash_filename = key.replace('/','_')
         f = unzip(key, download_obj)
         split_data = parser(f)
@@ -67,6 +65,4 @@ if __name__ == "__main__":
         upload(full_filename)
         os.remove(full_filename)
         os.remove(download_obj)
-    print 'Now end the session.'
-
-# f.close() somewhere 
+    print('Now end the session.')

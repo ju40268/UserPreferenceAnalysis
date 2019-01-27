@@ -39,3 +39,21 @@ United States of America,28295784
 ![alt text](https://github.com/may811204/UserPreferenceAnaylsis/blob/master/statsPlots/hour_pie_2016_02.png)
 
 ### World Map
+
+![alt text](https://github.com/may811204/UserPreferenceAnaylsis/blob/master/statsPlots/worldMap.png)
+
+## Dependency
+Specified in sparkProcessing/requirements.txt
+```
+matplotlib==2.2.2
+numpy==1.14.2
+pandas==0.22.0
+seaborn==0.8.1
+boto3==1.9.86
+findspark==1.3.0
+geoip2==2.9.0
+pyspark==2.4.0
+```
+
+## Author
+Christie Chen
