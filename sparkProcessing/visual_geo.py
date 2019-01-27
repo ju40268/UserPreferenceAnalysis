@@ -75,10 +75,12 @@ if __name__ == "__main__":
         rdd_list = list_concat(list_container)
         # country_count_collection = rdd_list.groupByKey().map(lambda x : (x[0], list(x[1])))
         output = rdd_list.reduceByKey(add).sortBy(lambda x: -x[1]).collect()
-        date_country_count_collection.append([month, everymonth_day, output])
+        # date_country_count_collection.append([month, everymonth_day, output])
 
-    var.save('geo_date_transaction_list_' + month, date_country_count_collection)
-    date_transaction_list = var.load('geo_date_transaction_list_' + month + '.pickle')
-    df = pd.DataFrame(date_transaction_list)
-    df.to_csv( 'geo_' + month + '.csv', index=False, header=['month','day','list'])
+    #var.save('geo_date_transaction_list_' + month, date_country_count_collection)
+    #date_transaction_list = var.load('geo_date_transaction_list_' + month + '.pickle')
+    #df = pd.DataFrame(date_transaction_list)
+    #df.to_csv( 'geo_' + month + '.csv', index=False, header=['month','day','list'])
+    df = pd.DataFrame(output)
+    df.to_csv( 'geo_only_list_' + month + '.csv', index=False, encoding='utf-8',header=['Country', 'transaction'])
     print 'End'
