@@ -32,7 +32,10 @@ United States of America,28295784
 ## Sample Stats Picture
 
 
-
+### Hourly Transaction Amount - Bar Chart
 ![alt text](https://github.com/may811204/UserPreferenceAnaylsis/blob/master/statsPlots/horiz_plot_2016_02.png "Hourly Transaction Amount")
 
+### Hourly Transaction Amount - Pie Chart
+![alt text](https://github.com/may811204/UserPreferenceAnaylsis/blob/master/statsPlots/hour_pie_2016_02.png)
 
+### World Map
